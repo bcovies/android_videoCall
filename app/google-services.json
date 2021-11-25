@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "865443984885",
+    "project_id": "dental-consulting",
+    "storage_bucket": "dental-consulting.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:865443984885:android:4f18b0d476e77727e0dcbc",
+        "android_client_info": {
+          "package_name": "br.com.dental_consulting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "865443984885-rc2aq0qvgnd2lrirrldmnhacgkp4gqki.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvLaRG0rdTOMmLZy6CW0Mj87Tv0FodGTM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "865443984885-rc2aq0qvgnd2lrirrldmnhacgkp4gqki.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
