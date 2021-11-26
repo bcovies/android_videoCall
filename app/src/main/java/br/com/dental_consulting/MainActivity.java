@@ -1,34 +1,20 @@
 package br.com.dental_consulting;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import br.com.dental_consulting.controllers.ValidarUsuario;
 import br.com.dental_consulting.models.Usuario;
@@ -50,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
         main_email = findViewById(R.id.main_editText_email);
         main_senha = findViewById(R.id.main_editText_senha);
-        botaoEntrar = findViewById(R.id.main_button_entrar);
-        botaoCadastrar = findViewById(R.id.main_button_cadastrar);
+        botaoEntrar = findViewById(R.id.main_botao_entrar);
+        botaoCadastrar = findViewById(R.id.main_botao_cadastrar);
 
         mAuth = FirebaseAuth.getInstance();
 
