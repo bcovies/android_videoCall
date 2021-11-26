@@ -39,7 +39,7 @@ public class DashboardActivity extends AppCompatActivity  implements ActivityCom
         mAuth = FirebaseAuth.getInstance();
 
         ActivityCompat.requestPermissions(DashboardActivity.this,new String[]{permissaoCamera},PERMISSION_REQUEST_CAMERA);
-        ActivityCompat.requestPermissions(DashboardActivity.this,new String[]{permissaoAudio},PERMISSION_REQUEST_RECORD_AUDIO);
+//        ActivityCompat.requestPermissions(DashboardActivity.this,new String[]{permissaoAudio},PERMISSION_REQUEST_RECORD_AUDIO);
         dashboard_idUsuario = findViewById(R.id.dashboard_textView_idUsuario);
         dashboard_emailUsuario = findViewById(R.id.dashboard_textView_emailUsuario);
 
