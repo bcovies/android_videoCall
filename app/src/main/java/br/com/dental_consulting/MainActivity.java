@@ -80,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private boolean usuarioLogado() {
-        final FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
+        final FirebaseUser usuarioAtual = mAuth.getCurrentUser();
+        if (usuarioAtual != null) {
             Toast.makeText(MainActivity.this, "Usuário já logado!", Toast.LENGTH_SHORT).show();
             Toast.makeText(MainActivity.this, "Bem-vindo!", Toast.LENGTH_SHORT).show();
             return true;
