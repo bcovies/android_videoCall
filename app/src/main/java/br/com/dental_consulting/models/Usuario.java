@@ -7,10 +7,33 @@ public class Usuario {
     private String nome;
     private String telefone;
     private String nascimento;
+    private boolean estaDisponivel;
+    private String emChamadaCom;
+    private String idConexao;
 
     public Usuario() {
     }
 
+    public Usuario(String email, String senha, String nome, String telefone, String nascimento, boolean estaDisponivel, String emChamadaCom, String idConexao) {
+        this.email = email;
+        this.senha = senha;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.nascimento = nascimento;
+        this.estaDisponivel = estaDisponivel;
+        this.emChamadaCom = emChamadaCom;
+        this.idConexao = idConexao;
+    }
+    public Usuario(String email, String nome, String telefone, String nascimento, boolean estaDisponivel, String emChamadaCom, String idConexao) {
+        this.email = email;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.nascimento = nascimento;
+        this.estaDisponivel = estaDisponivel;
+        this.emChamadaCom = emChamadaCom;
+        this.idConexao = idConexao;
+    }
+    // Cadastro
     public Usuario(String email, String senha, String nome, String telefone, String nascimento) {
         this.email = email;
         this.senha = senha;
@@ -18,16 +41,41 @@ public class Usuario {
         this.telefone = telefone;
         this.nascimento = nascimento;
     }
-
-    public Usuario(String email,  String nome, String telefone, String nascimento) {
+    //Cadastro sem Senha
+    public Usuario(String email, String nome, String telefone, String nascimento) {
         this.email = email;
         this.nome = nome;
         this.telefone = telefone;
         this.nascimento = nascimento;
     }
+    // Login
     public Usuario(String email, String senha) {
         this.email = email;
         this.senha = senha;
+    }
+
+    public boolean isEstaDisponivel() {
+        return estaDisponivel;
+    }
+
+    public void setEstaDisponivel(boolean estaDisponivel) {
+        this.estaDisponivel = estaDisponivel;
+    }
+
+    public String getEmChamadaCom() {
+        return emChamadaCom;
+    }
+
+    public void setEmChamadaCom(String emChamadaCom) {
+        this.emChamadaCom = emChamadaCom;
+    }
+
+    public String getIdConexao() {
+        return idConexao;
+    }
+
+    public void setIdConexao(String idConexao) {
+        this.idConexao = idConexao;
     }
 
     public String getEmail() {

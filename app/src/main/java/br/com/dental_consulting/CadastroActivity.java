@@ -34,6 +34,9 @@ public class CadastroActivity extends AppCompatActivity {
     private String nome;
     private String telefone;
     private String nascimento;
+    private boolean estaDisponivel;
+    private String emChamadaCom;
+    private String idConexao;
 
     private FirebaseAuth mAuth;
     private FirebaseDatabase mDatabase;
@@ -64,10 +67,13 @@ public class CadastroActivity extends AppCompatActivity {
                 nome = registar_nome.getText().toString();
                 telefone = registar_telefone.getText().toString();
                 nascimento = registar_nascimento.getText().toString();
-
+                estaDisponivel = true;
+                emChamadaCom = "null";
+                idConexao = "null";
                 if(validarUsuario.validarEmail(email) && validarUsuario.validarSenha(senha) && validarUsuario.validarNome(nome) && validarUsuario.validarTelefone(telefone) && validarUsuario.validarNascimento(nascimento)){
 //                    System.out.println("Email: " + email + "Senha: " + senha + "Nome: " + nome + "Telefone: " + telefone + "Nascimento: " + nascimento);
-                    Usuario usuario = new Usuario(email,senha,nome,telefone,nascimento);
+
+                    Usuario usuario = new Usuario(email,senha,nome,telefone,nascimento,estaDisponivel,emChamadaCom,idConexao);
                     criarUsuario(usuario);
                 }else{
                     System.out.println("Demandas não atingidas");
@@ -92,7 +98,7 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     private void criarBancoUsuario(Usuario usuario){
-        Usuario usuarioTemp = new Usuario(usuario.getEmail(),usuario.getNome(),usuario.getTelefone(),usuario.getNascimento());
+        Usuario usuarioTemp = new Usuario(usuario.getEmail(),usuario.getNome(),usuario.getTelefone(),usuario.getNascimento(), usuario.isEstaDisponivel(), usuario.getEmChamadaCom(), usuario.getIdConexao());
         String ID = mAuth.getCurrentUser().getUid();
         DatabaseReference myRef = mDatabase.getReference("usuarios/" + ID + "/dados/");
         myRef.setValue(usuarioTemp);

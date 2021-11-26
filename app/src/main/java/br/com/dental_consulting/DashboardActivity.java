@@ -70,10 +70,10 @@ public class DashboardActivity extends AppCompatActivity  implements ActivityCom
             // Request for camera permission.
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission has been granted. Start camera preview Activity.
-                Toast.makeText(DashboardActivity.this, "Sucesso!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DashboardActivity.this, "Permissão de câmera adquirida com sucesso!", Toast.LENGTH_SHORT).show();
             } else {
                 // Permission request was denied.
-                Toast.makeText(DashboardActivity.this, "Falhou!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DashboardActivity.this, "Permissão de câmera falhou!", Toast.LENGTH_SHORT).show();
             }
         }
         // END_INCLUDE(onRequestPermissionsResult)
