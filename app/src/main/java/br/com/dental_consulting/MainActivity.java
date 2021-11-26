@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     acessarDashboardActivity();
                 }else{
-                    Toast.makeText(MainActivity.this, "Houve no banco de dados...", Toast.LENGTH_SHORT);
+                    Toast.makeText(MainActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });

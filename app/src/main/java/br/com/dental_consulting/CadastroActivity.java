@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -81,15 +82,16 @@ public class CadastroActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    criarRealDatabase(usuario);
+                    criarBancoUsuario(usuario);
                 }else{
-                    Toast.makeText(CadastroActivity.this, "Ocorreu um erro ao cadastrar usuário", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CadastroActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
     }
 
-    private void criarRealDatabase(Usuario usuario){
+    private void criarBancoUsuario(Usuario usuario){
         Usuario usuarioTemp = new Usuario(usuario.getEmail(),usuario.getNome(),usuario.getTelefone(),usuario.getNascimento());
         String ID = mAuth.getCurrentUser().getUid();
         DatabaseReference myRef = mDatabase.getReference("usuarios/" + ID + "/dados/");
