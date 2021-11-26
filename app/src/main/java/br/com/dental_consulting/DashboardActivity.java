@@ -27,6 +27,8 @@ public class DashboardActivity extends AppCompatActivity  implements ActivityCom
     private TextView dashboard_idUsuario;
     private TextView dashboard_emailUsuario;
     private Button botaoSair;
+    private Button botaoChamada;
+
     private static final int PERMISSION_REQUEST_CAMERA = 0;
     private static final int PERMISSION_REQUEST_RECORD_AUDIO = 0;
     String permissaoCamera = "android.permission.CAMERA";
@@ -59,6 +61,14 @@ public class DashboardActivity extends AppCompatActivity  implements ActivityCom
                 usuarioSair();
             }
         });
+
+        botaoChamada = findViewById(R.id.dashboard_botao_chamada);
+        botaoChamada.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                acessarChamada();
+            }
+        });
     }
 
     @Override
@@ -78,6 +88,10 @@ public class DashboardActivity extends AppCompatActivity  implements ActivityCom
         }
         // END_INCLUDE(onRequestPermissionsResult)
     }
+    private void acessarChamada() {
+        startActivity(new Intent(this, ChamadaActivity.class));
+    }
+
     private void usuarioSair() {
         mAuth.signOut();
         finish();

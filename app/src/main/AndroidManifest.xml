@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Dental_consulting"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ChamadaActivity"
+            android:exported="false" />
+        <activity
             android:name=".CadastroActivity"
             android:exported="false" />
         <activity
