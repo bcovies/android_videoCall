@@ -34,10 +34,10 @@ public class CadastroActivity extends AppCompatActivity {
     private String telefone;
     private String nascimento;
 
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase mDatabase;
+
     ValidarUsuario validarUsuario = new ValidarUsuario();
-    private FirebaseAuth firebaseAuth;
-    private DatabaseReference databaseReference;
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,9 @@ public class CadastroActivity extends AppCompatActivity {
         registar_nascimento = findViewById(R.id.cadastro_editText_nascimento);
         registrar_usuario = findViewById(R.id.cadastro_botao_cadastrar);
 
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
+
         registrar_usuario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -62,7 +65,9 @@ public class CadastroActivity extends AppCompatActivity {
                 nascimento = registar_nascimento.getText().toString();
 
                 if(validarUsuario.validarEmail(email) && validarUsuario.validarSenha(senha) && validarUsuario.validarNome(nome) && validarUsuario.validarTelefone(telefone) && validarUsuario.validarNascimento(nascimento)){
-                    System.out.println("Email: " + email + "Senha: " + senha + "Nome: " + nome + "Telefone: " + telefone + "Nascimento: " + nascimento);
+//                    System.out.println("Email: " + email + "Senha: " + senha + "Nome: " + nome + "Telefone: " + telefone + "Nascimento: " + nascimento);
+                    Usuario usuario = new Usuario(email,senha,nome,telefone,nascimento);
+                    criarUsuario(usuario);
                 }else{
                     System.out.println("Demandas não atingidas");
                 }
@@ -71,32 +76,31 @@ public class CadastroActivity extends AppCompatActivity {
         });
     }
 
-
-
-    private void cadastrarUsuarioFirebase(String email, String password) {
-        firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+    private void criarUsuario(Usuario usuario) {
+        mAuth.createUserWithEmailAndPassword(usuario.getEmail(),usuario.getSenha()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    acessarDashboardActivity();
-                    criarRealDatabase(email, password);
+                    criarRealDatabase(usuario);
+                }else{
+                    Toast.makeText(CadastroActivity.this, "Ocorreu um erro ao cadastrar usuário", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
+    private void criarRealDatabase(Usuario usuario){
+        Usuario usuarioTemp = new Usuario(usuario.getEmail(),usuario.getNome(),usuario.getTelefone(),usuario.getNascimento());
+        String ID = mAuth.getCurrentUser().getUid();
+        DatabaseReference myRef = mDatabase.getReference("usuarios/" + ID + "/dados/");
+        myRef.setValue(usuarioTemp);
+        Toast.makeText(CadastroActivity.this, "Usuário cadastrado com sucesso!!", Toast.LENGTH_SHORT).show();
+        acessarDashboardActivity();
+    }
+
     public void acessarDashboardActivity() {
         finish();
         startActivity(new Intent(this, DashboardActivity.class));
     }
 
-    private void criarRealDatabase(String email, String password){
-
-//        Toast.makeText(MainActivity.this,  firebaseAuth.getInstance().getCurrentUser().getUid().toString() , Toast.LENGTH_SHORT).show();
-        String ID = firebaseAuth.getInstance().getCurrentUser().getUid();
-//        Usuario usuario = new Usuario();
-//        usuario.setEmail(email);
-        DatabaseReference myRef = database.getReference("usuarios/" + ID);
-
-//        myRef.setValue(usuario);
-    }
 }
