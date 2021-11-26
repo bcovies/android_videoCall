@@ -18,11 +18,16 @@ public class Usuario {
         this.telefone = telefone;
         this.nascimento = nascimento;
     }
+
     public Usuario(String email,  String nome, String telefone, String nascimento) {
         this.email = email;
         this.nome = nome;
         this.telefone = telefone;
         this.nascimento = nascimento;
+    }
+    public Usuario(String email, String senha) {
+        this.email = email;
+        this.senha = senha;
     }
 
     public String getEmail() {

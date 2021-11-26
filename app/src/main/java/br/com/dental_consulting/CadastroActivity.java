@@ -26,7 +26,7 @@ public class CadastroActivity extends AppCompatActivity {
     private EditText registar_nome;
     private EditText registar_telefone;
     private EditText registar_nascimento;
-    private Button registrar_usuario;
+    private Button botaoRegistrar;
 
     private String email;
     private String senha;
@@ -49,12 +49,12 @@ public class CadastroActivity extends AppCompatActivity {
         registar_nome = findViewById(R.id.cadastro_editText_nome);
         registar_telefone = findViewById(R.id.cadastro_editText_telefone);
         registar_nascimento = findViewById(R.id.cadastro_editText_nascimento);
-        registrar_usuario = findViewById(R.id.cadastro_botao_cadastrar);
+        botaoRegistrar = findViewById(R.id.cadastro_botao_cadastrar);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance();
 
-        registrar_usuario.setOnClickListener(new View.OnClickListener() {
+        botaoRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 

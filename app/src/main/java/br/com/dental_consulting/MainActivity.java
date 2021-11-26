@@ -30,95 +30,53 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import br.com.dental_consulting.controllers.ValidarUsuario;
 import br.com.dental_consulting.models.Usuario;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText editText_email;
-    private EditText editText_senha;
-    private Button button_entrar;
-    private Button button_cadastrar;
+    private EditText main_email;
+    private EditText main_senha;
+    private Button botaoEntrar;
+    private Button botaoCadastrar;
     private String email;
-    private String password;
-    private FirebaseAuth firebaseAuth;
+    private String senha;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mReference;
+    private FirebaseDatabase mDatabase;
 
-    private DatabaseReference databaseReference;
-    private FirebaseDatabase database = FirebaseDatabase.getInstance();
-
-    private boolean usuarioLogado() {
-        final FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        boolean logado = false;
-        if (currentUser != null) {
-            System.out.println("\nUsuário ESTÁ logado");
-            logado = true;
-        } else {
-            System.out.println("\nUsuário NÃO está logado");
-        }
-        return logado;
-    }
-
-    public void acessaDashboardActivity() {
-        finish();
-        startActivity(new Intent(this, DashboardActivity.class));
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        if (usuarioLogado()) {
-            acessaDashboardActivity();
-        }
-    }
-
-    private void inicializarVariaveis() {
-        editText_email = findViewById(R.id.main_editText_email);
-        editText_senha = findViewById(R.id.main_editText_senha);
-        button_entrar = findViewById(R.id.main_button_entrar);
-        button_cadastrar = findViewById(R.id.main_button_cadastrar);
-    }
-
-    public void alocarVariaveisString() {
-        email = editText_email.getText().toString();
-        password = editText_senha.getText().toString();
-    }
-
-    private void inicializaFirebaseAuth() {
-        firebaseAuth = FirebaseAuth.getInstance();
-    }
-
-
-    private void acessarUsuarioFirebase(String email, String password) {
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    acessaDashboardActivity();
-                }
-            }
-        });
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        inicializarVariaveis();
-        inicializaFirebaseAuth();
-        databaseReference = FirebaseDatabase.getInstance().getReference();
+        main_email = findViewById(R.id.main_editText_email);
+        main_senha = findViewById(R.id.main_editText_senha);
+        botaoEntrar = findViewById(R.id.main_button_entrar);
+        botaoCadastrar = findViewById(R.id.main_button_cadastrar);
 
-        Toast.makeText(MainActivity.this, databaseReference.toString(), Toast.LENGTH_SHORT).show();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance();
+        mReference = FirebaseDatabase.getInstance().getReference();
 
-        button_entrar.setOnClickListener(new View.OnClickListener() {
+        ValidarUsuario validarUsuario = new ValidarUsuario();
+
+        botaoEntrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alocarVariaveisString();
-                acessarUsuarioFirebase(email, password);
+                email = main_email.getText().toString();
+                senha = main_senha.getText().toString();
+                if(validarUsuario.validarEmail(email) && validarUsuario.validarSenha(senha)){
+                    Usuario usuario = new Usuario(email,senha);
+                    autenticarUsuario(usuario);
+                }else{
+                    Toast.makeText(MainActivity.this, "Houve um problema nos campos inseridos...", Toast.LENGTH_SHORT);
+                }
+
             }
         });
 
-        button_cadastrar.setOnClickListener(new View.OnClickListener() {
+        botaoCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, CadastroActivity.class));
@@ -126,4 +84,42 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private boolean usuarioLogado() {
+        final FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            Toast.makeText(MainActivity.this, "Usuário já logado!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, "Bem-vindo!", Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            Toast.makeText(MainActivity.this, "Usuário não logado, faça cadastro ou login!", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (usuarioLogado()) {
+            acessarDashboardActivity();
+        }
+    }
+
+    private void autenticarUsuario(Usuario usuario) {
+        mAuth.signInWithEmailAndPassword(usuario.getEmail(), usuario.getSenha()).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    acessarDashboardActivity();
+                }else{
+                    Toast.makeText(MainActivity.this, "Houve no banco de dados...", Toast.LENGTH_SHORT);
+                }
+            }
+        });
+    }
+
+    public void acessarDashboardActivity() {
+        finish();
+        Toast.makeText(MainActivity.this, "Bem-vindo!", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, DashboardActivity.class));
+    }
 }
