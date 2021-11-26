@@ -11,23 +11,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="50dp"
         android:layout_marginEnd="100dp"
         android:ems="10"
         android:hint="Email"
         android:inputType="textEmailAddress"
         android:minHeight="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.100000024" />
 
     <EditText
         android:id="@+id/main_editText_senha"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="100dp"
         android:ems="10"
         android:hint="Senha"
@@ -38,7 +39,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_editText_email"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.011" />
 
     <Button
         android:id="@+id/main_button_cadastrar"
@@ -48,21 +49,21 @@
         android:layout_marginTop="50dp"
         android:layout_marginEnd="100dp"
         android:text="Cadastrar"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_button_entrar" />
+        app:layout_constraintTop_toBottomOf="@+id/main_button_entrar"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/main_button_entrar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="50dp"
         android:layout_marginEnd="100dp"
         android:text="Entrar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_editText_senha"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

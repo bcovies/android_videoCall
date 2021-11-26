@@ -1,52 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DashboardActivity">
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/activity_dashboard_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:contentDescription="TODO"
-        tools:ignore="VectorDrawableCompat" />
-
-
+    tools:context=".DashboardActivity" >
 
     <TextView
-        android:id="@+id/activity_dashboard_textView_userId"
-        android:layout_width="match_parent"
+        android:id="@+id/dashboard_textView_idUsuario"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:text="TextView"
-        android:textSize="18sp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.112" />
 
     <TextView
-        android:id="@+id/activity_dashboard_textView_userEmail"
-        android:layout_width="match_parent"
+        android:id="@+id/dashboard_textView_emailUsuario"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
         android:text="TextView"
-        android:textSize="18sp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.254" />
 
     <Button
-        android:id="@+id/activity_dashboard_button_resetEmail"
+        android:id="@+id/dashboard_botao_sair"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="150dp"
-        android:layout_marginLeft="150dp"
-        android:text="Reset Email" />
-
-    <Button
-        android:id="@+id/activity_dashboard_button_callActiviry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="150dp"
-        android:layout_marginTop="300dp"
-        android:text="Ir para Call" />
-
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        android:text="Sair"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.625" />
+</androidx.constraintlayout.widget.ConstraintLayout>
