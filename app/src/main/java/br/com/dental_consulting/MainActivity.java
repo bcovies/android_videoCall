@@ -42,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
     private String email;
     private String senha;
     private FirebaseAuth mAuth;
-    private DatabaseReference mReference;
-    private FirebaseDatabase mDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,8 +54,6 @@ public class MainActivity extends AppCompatActivity {
         botaoCadastrar = findViewById(R.id.main_button_cadastrar);
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance();
-        mReference = FirebaseDatabase.getInstance().getReference();
 
         ValidarUsuario validarUsuario = new ValidarUsuario();
 
@@ -72,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     Toast.makeText(MainActivity.this, "Houve um problema nos campos inseridos...", Toast.LENGTH_SHORT);
                 }
-
             }
         });
 
