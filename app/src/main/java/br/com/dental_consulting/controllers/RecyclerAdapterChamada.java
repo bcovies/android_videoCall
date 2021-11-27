@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +24,7 @@ public class RecyclerAdapterChamada extends RecyclerView.Adapter<RecyclerAdapter
     private ArrayList<String> arrayList = new ArrayList<>();
     private Context context;
     private TextView textView;
+    private Button button;
 
     //Construtor
     public RecyclerAdapterChamada(Context context, ArrayList<String> arrayList) {
@@ -62,8 +64,9 @@ public class RecyclerAdapterChamada extends RecyclerView.Adapter<RecyclerAdapter
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.activity_chamada_recyclerview_textView);
+            button = itemView.findViewById(R.id.activity_chamada_recyclerview_botao);
 
-            textView.setOnClickListener(new View.OnClickListener() {
+            button.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     texto = textView.getText().toString();
@@ -73,7 +76,7 @@ public class RecyclerAdapterChamada extends RecyclerView.Adapter<RecyclerAdapter
                 private void imprimeTexto(String texto) {
                     System.out.println("Texto aqui:" + texto );
                 }
-
+                
             });
 
         }
