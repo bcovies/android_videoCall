@@ -62,6 +62,7 @@ public class ChamadaActivity extends AppCompatActivity {
                     }
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 System.out.println(error);

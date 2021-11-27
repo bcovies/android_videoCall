@@ -1,7 +1,9 @@
 package br.com.dental_consulting.controllers;
 
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +26,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import br.com.dental_consulting.ChamadaActivity;
+import br.com.dental_consulting.MainActivity;
 import br.com.dental_consulting.R;
+import br.com.dental_consulting.TelaDeChamadaActivity;
 import br.com.dental_consulting.models.Usuario;
 
 public class RecyclerAdapterChamada extends RecyclerView.Adapter<RecyclerAdapterChamada.ViewHolder> {
@@ -87,6 +91,7 @@ public class RecyclerAdapterChamada extends RecyclerView.Adapter<RecyclerAdapter
                     if (novoUsuario.isEstaDisponivel()) {
                         System.out.println("O usuário " + mAuth.getEmail() + " de ID: " + mAuth.getUid() + " está chamando " + novoUsuario.getEmail() + " de ID: " + novoUsuario.getChaveUsuario());
                         alterarEstado();
+
                     } else {
                         System.out.println("Usuario não está disponível!");
                     }
@@ -94,12 +99,26 @@ public class RecyclerAdapterChamada extends RecyclerView.Adapter<RecyclerAdapter
 
                 private void alterarEstado() {
                     mDatabase = FirebaseDatabase.getInstance().getReference("usuarios");
+                    // altera estaDisponivel
                     mDatabase.child(novoUsuario.getChaveUsuario()).child("dados").child("estaDisponivel").setValue(false);
                     mDatabase.child(mAuth.getUid()).child("dados").child("estaDisponivel").setValue(false);
+                    // altera emChamadaCom
+                    mDatabase.child(novoUsuario.getChaveUsuario()).child("dados").child("emChamadaCom").setValue(mAuth.getEmail());
+                    mDatabase.child(mAuth.getUid()).child("dados").child("emChamadaCom").setValue(novoUsuario.getEmail());
+                    //chamar tela
+
+                    telaDeChamada();
                 }
+
+                private void telaDeChamada() {
+                    ((Activity) context).finish();
+                    Context context = itemView.getContext();
+                    Intent intent = new Intent(context, TelaDeChamadaActivity.class);
+                    intent.putExtra("parceiroDeChamada", novoUsuario);
+                    ((Activity) context).startActivity(intent);
+                }
+
             });
-
-
         }
     }
 }
