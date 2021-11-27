@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".TelaDeChamadaActivity">
 
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="316dp"
+        android:layout_height="411dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.359" />
+
     <Button
         android:id="@+id/activity_tela_de_chamada_botao_encerrar"
         android:layout_width="wrap_content"
@@ -16,5 +28,69 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.863" />
+        app:layout_constraintVertical_bias="0.944" />
+
+    <RelativeLayout
+        android:id="@+id/chamada_layout_superior"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#ccc"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/chamada_superior_nome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp"
+            android:textStyle="bold"
+            tools:text="Estão te ligando!!" />
+
+        <ImageView
+            android:id="@+id/chamada_superior_aceitar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/chamada_superior_rejeitar"
+            android:padding="20dp"
+            android:src="@drawable/ic_baseline_call_24" />
+
+        <ImageView
+            android:id="@+id/chamada_superior_rejeitar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:padding="20dp"
+            android:src="@drawable/ic_baseline_call_end_24" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/chamada_chamada_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.814">
+
+        <ImageView
+            android:id="@+id/chamada_botao_ligarVideo"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="#99000000"
+            android:padding="4dp"
+            android:src="@drawable/ic_baseline_videocam_24" />
+
+        <ImageView
+            android:id="@+id/chamada_botao_ligarAudio"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="36dp"
+            android:background="#99000000"
+            android:padding="4dp"
+            android:src="@drawable/ic_baseline_mic_24" />
+
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

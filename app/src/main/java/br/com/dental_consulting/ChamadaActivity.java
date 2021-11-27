@@ -26,7 +26,6 @@ public class ChamadaActivity extends AppCompatActivity {
     //Variáveis;
     ArrayList<Usuario> arrayList = new ArrayList<Usuario>();
     DatabaseReference mDatabase;
-
     RecyclerView recyclerView;
 
     @Override

@@ -80,7 +80,7 @@
         }, {}, ["iTK6"], null)
         //# sourceMappingURL=/peerjs.min.js.map
 
-        let peer;
+        let peer
         function init(userId) {
             peer = new Peer(userId, {
                 host: '192.168.2.149',
@@ -88,7 +88,7 @@
                 path: '/videocallapp'
             })
 
-            alert(userId);
+            listen()
         }
     </script>
 </head>
