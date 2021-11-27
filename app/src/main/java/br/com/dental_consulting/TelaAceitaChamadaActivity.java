@@ -1,8 +1,8 @@
 package br.com.dental_consulting;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,14 +19,18 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.UUID;
 
 import br.com.dental_consulting.models.Usuario;
 
-public class TelaDeChamadaActivity extends AppCompatActivity {
+public class TelaAceitaChamadaActivity extends AppCompatActivity {
+
     DatabaseReference mDatabase;
     FirebaseUser mAuth = FirebaseAuth.getInstance().getCurrentUser();
     Usuario parceiroDeChamada;
@@ -35,28 +39,27 @@ public class TelaDeChamadaActivity extends AppCompatActivity {
     WebSettings webSettings;
     String uniqueId;
 
-
     LinearLayout linearLayout;
     private Object String;
     private android.webkit.ValueCallback<java.lang.String> ValueCallback;
-
 
     @Override
     protected void onStart() {
         super.onStart();
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tela_de_chamada);
+        setContentView(R.layout.activity_tela_aceita_chamada);
 
         parceiroDeChamada = getIntent().getParcelableExtra("parceiroDeChamada");
-        webView = findViewById(R.id.activity_tela_de_chamada_webView);
+        webView = findViewById(R.id.activity_tela_aceita_chamada_webView);
         webSettings = webView.getSettings();
-        encerrar_chamada = findViewById(R.id.activity_tela_de_chamada_botao_encerrar);
+        encerrar_chamada = findViewById(R.id.activity_tela_aceita_chamada_botao_encerrar);
 
-        linearLayout = findViewById(R.id.activity_tela_de_chamada_linear_layout);
+        linearLayout = findViewById(R.id.activity_tela_aceita_chamada_linear_layout);
 
         encerrar_chamada.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,15 +78,15 @@ public class TelaDeChamadaActivity extends AppCompatActivity {
     }
 
     private void encerrarChamada(Usuario parceiroDeChamada) {
-        mDatabase = FirebaseDatabase.getInstance().getReference("usuarios");
-
-        mDatabase.child(parceiroDeChamada.getChaveUsuario()).child("dados").child("estaDisponivel").setValue(true);
-        mDatabase.child(parceiroDeChamada.getChaveUsuario()).child("dados").child("idConexao").setValue("null");
-        mDatabase.child(parceiroDeChamada.getChaveUsuario()).child("dados").child("emChamadaCom").setValue("null");
-
-        mDatabase.child(mAuth.getUid()).child("dados").child("estaDisponivel").setValue(true);
-        mDatabase.child(mAuth.getUid()).child("dados").child("emChamadaCom").setValue("null");
-        mDatabase.child(mAuth.getUid()).child("dados").child("idConexao").setValue("null");
+//        mDatabase = FirebaseDatabase.getInstance().getReference("usuarios");
+//
+//        mDatabase.child(parceiroDeChamada.getChaveUsuario()).child("dados").child("estaDisponivel").setValue(true);
+//        mDatabase.child(parceiroDeChamada.getChaveUsuario()).child("dados").child("idConexao").setValue("null");
+//        mDatabase.child(parceiroDeChamada.getChaveUsuario()).child("dados").child("emChamadaCom").setValue("null");
+//
+//        mDatabase.child(mAuth.getUid()).child("dados").child("estaDisponivel").setValue(true);
+//        mDatabase.child(mAuth.getUid()).child("dados").child("emChamadaCom").setValue("null");
+//        mDatabase.child(mAuth.getUid()).child("dados").child("idConexao").setValue("null");
 
         voltarTela();
     }
@@ -109,9 +112,9 @@ public class TelaDeChamadaActivity extends AppCompatActivity {
                 super.onPermissionRequest(request);
                 if (request != null) {
                     request.grant(request.getResources());
-                    Toast.makeText(TelaDeChamadaActivity.this, "Precisa aceitar permissões", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TelaAceitaChamadaActivity.this, "Precisa aceitar permissões", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(TelaDeChamadaActivity.this, "permissões OK", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(TelaAceitaChamadaActivity.this, "permissões OK", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -132,9 +135,11 @@ public class TelaDeChamadaActivity extends AppCompatActivity {
     }
 
     private void initializePeer() {
+
         getFirstUser(new ValueCallback<String>() {
             @Override
             public void onReceiveValue(String value) {
+
                 if (value != null && value.length() != 0 && !value.equals("null")) {
                     //do something with proper value
 //                    System.out.println("Valor: " + value);
@@ -144,36 +149,40 @@ public class TelaDeChamadaActivity extends AppCompatActivity {
                 }
             }
         });
-//        onCallRequest(parceiroDeChamada.getNome());
+
     }
 
     private void getFirstUser(final ValueCallback<String> valueCallback) {
-        uniqueId = getUniqueID();
-        String evS = "javascript:init('"+uniqueId+ "')";
-        System.out.println("UNICO ID: " + uniqueId);
-        try {
-            webView.evaluateJavascript(evS, valueCallback);
-            conectaOsUsuarios(parceiroDeChamada,uniqueId);
-        } catch (Exception e) {
-            System.out.println("Erro try: " + e);
-            valueCallback.onReceiveValue(null);// You can pass any value instead of null.
-        }
-    }
+    //faz consulta de IDCONEXAO
 
-    private void conectaOsUsuarios(Usuario parceiroDeChamada,  String evS) {
+
         mDatabase = FirebaseDatabase.getInstance().getReference("usuarios");
-        // altera estaDisponivel
-        mDatabase.child(parceiroDeChamada.getChaveUsuario()).child("dados").child("idConexao").setValue(evS);
-        mDatabase.child(mAuth.getUid()).child("dados").child("idConexao").setValue(evS);
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                String  mUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+                Usuario usuario = snapshot.child(mUid).child("dados").getValue(Usuario.class);
+
+                String evS = "javascript:init('"+usuario.getIdConexao()+ "')";
+
+                System.out.println("UNICO ID QUE IRÁ SE CONECTAR: " + usuario.getIdConexao());
+                try {
+                    webView.evaluateJavascript(evS, valueCallback);
+
+                } catch (Exception e) {
+                    System.out.println("Erro try: " + e);
+                    valueCallback.onReceiveValue(null);// You can pass any value instead of null.
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
-
-    private void switchToControls() {
-        linearLayout.setVisibility(View.VISIBLE);
-    }
-
-
-    private String getUniqueID() {
-        return UUID.randomUUID().toString();
-    }
 }

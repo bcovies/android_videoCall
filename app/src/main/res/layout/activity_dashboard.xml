@@ -6,6 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".DashboardActivity" >
 
+
+    <RelativeLayout
+        android:id="@+id/dashboard_chamada_layout_superior"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="#ccc"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/dashboard_chamada_superior_nome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp"
+            android:textStyle="bold"
+            tools:text="Estão te ligando!!" />
+
+        <ImageView
+            android:id="@+id/dashboard_chamada_superior_aceitar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/dashboard_chamada_superior_rejeitar"
+            android:padding="20dp"
+            android:src="@drawable/ic_baseline_call_24" />
+
+        <ImageView
+            android:id="@+id/dashboard_chamada_superior_rejeitar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:padding="20dp"
+            android:src="@drawable/ic_baseline_call_end_24" />
+
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/dashboard_textView_idUsuario"
         android:layout_width="wrap_content"
@@ -16,7 +50,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.112" />
+        app:layout_constraintVertical_bias="0.278" />
 
     <TextView
         android:id="@+id/dashboard_textView_emailUsuario"
@@ -28,7 +62,7 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.254" />
+        app:layout_constraintVertical_bias="0.379" />
 
     <Button
         android:id="@+id/dashboard_botao_sair"
