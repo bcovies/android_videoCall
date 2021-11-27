@@ -10,9 +10,24 @@ public class Usuario {
     private boolean estaDisponivel;
     private String emChamadaCom;
     private String idConexao;
+    private String chaveUsuario;
 
     public Usuario() {
     }
+
+    public Usuario(String email, String nome, String telefone, String nascimento, boolean estaDisponivel, String emChamadaCom, String idConexao, String chaveUsuario) {
+        this.email = email;
+        this.senha = senha;
+        this.nome = nome;
+        this.telefone = telefone;
+        this.nascimento = nascimento;
+        this.estaDisponivel = estaDisponivel;
+        this.emChamadaCom = emChamadaCom;
+        this.idConexao = idConexao;
+        this.chaveUsuario = chaveUsuario;
+    }
+
+
 
     public Usuario(String email, String senha, String nome, String telefone, String nascimento, boolean estaDisponivel, String emChamadaCom, String idConexao) {
         this.email = email;
@@ -52,6 +67,14 @@ public class Usuario {
     public Usuario(String email, String senha) {
         this.email = email;
         this.senha = senha;
+    }
+
+    public String getChaveUsuario() {
+        return chaveUsuario;
+    }
+
+    public void setChaveUsuario(String chaveUsuario) {
+        this.chaveUsuario = chaveUsuario;
     }
 
     public boolean isEstaDisponivel() {

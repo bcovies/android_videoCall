@@ -98,8 +98,12 @@ public class CadastroActivity extends AppCompatActivity {
     }
 
     private void criarBancoUsuario(Usuario usuario){
-        Usuario usuarioTemp = new Usuario(usuario.getEmail(),usuario.getNome(),usuario.getTelefone(),usuario.getNascimento(), usuario.isEstaDisponivel(), usuario.getEmChamadaCom(), usuario.getIdConexao());
+
         String ID = mAuth.getCurrentUser().getUid();
+        usuario.setChaveUsuario(ID);
+
+        Usuario usuarioTemp = new Usuario(usuario.getEmail(),usuario.getNome(),usuario.getTelefone(),usuario.getNascimento(), usuario.isEstaDisponivel(), usuario.getEmChamadaCom(), usuario.getIdConexao(), usuario.getChaveUsuario());
+
         DatabaseReference myRef = mDatabase.getReference("usuarios/" + ID + "/dados/");
         myRef.setValue(usuarioTemp);
         Toast.makeText(CadastroActivity.this, "Usuário cadastrado com sucesso!!", Toast.LENGTH_SHORT).show();
