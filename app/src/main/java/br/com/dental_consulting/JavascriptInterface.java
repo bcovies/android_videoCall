@@ -4,6 +4,6 @@ public class JavascriptInterface {
 
     @android.webkit.JavascriptInterface
     public void onPeerConnected(){
-        ChamadaActivity.onPeerConnected();
+//        ChamadaActivity.onPeerConnected();
     }
 }
