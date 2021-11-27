@@ -150,7 +150,8 @@ public class TelaDeChamadaActivity extends AppCompatActivity {
     private void getFirstUser(final ValueCallback<String> valueCallback) {
         uniqueId = getUniqueID();
         String evS = "javascript:init('"+uniqueId+ "')";
-        System.out.println("UNICO ID: " + uniqueId);
+        System.out.println("UNICO ID CONETANDO 1: " + uniqueId);
+
         try {
             webView.evaluateJavascript(evS, valueCallback);
             conectaOsUsuarios(parceiroDeChamada,uniqueId);

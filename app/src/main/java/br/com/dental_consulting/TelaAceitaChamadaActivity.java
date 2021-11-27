@@ -155,6 +155,17 @@ public class TelaAceitaChamadaActivity extends AppCompatActivity {
     private void getFirstUser(final ValueCallback<String> valueCallback) {
     //faz consulta de IDCONEXAO
 
+        uniqueId = getUniqueID();
+        String evS = "javascript:init('"+uniqueId+ "')";
+        System.out.println("UNICO ID CONETANDO 2: " + uniqueId);
+        try {
+            webView.evaluateJavascript(evS, valueCallback);
+
+        } catch (Exception e) {
+            System.out.println("Erro try: " + e);
+            valueCallback.onReceiveValue(null);// You can pass any value instead of null.
+        }
+
 
         mDatabase = FirebaseDatabase.getInstance().getReference("usuarios");
         mDatabase.addValueEventListener(new ValueEventListener() {
@@ -165,9 +176,9 @@ public class TelaAceitaChamadaActivity extends AppCompatActivity {
 
                 Usuario usuario = snapshot.child(mUid).child("dados").getValue(Usuario.class);
 
-                String evS = "javascript:init('"+usuario.getIdConexao()+ "')";
+                String evS = "javascript:startCall('"+usuario.getIdConexao()+ "')";
 
-                System.out.println("UNICO ID QUE IRÁ SE CONECTAR: " + usuario.getIdConexao());
+                System.out.println("UNICO ID QUE IRÁ SE CONECTAR2: " + usuario.getIdConexao());
                 try {
                     webView.evaluateJavascript(evS, valueCallback);
 
@@ -183,6 +194,11 @@ public class TelaAceitaChamadaActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+
+    private String getUniqueID() {
+        return UUID.randomUUID().toString();
     }
 
 }
