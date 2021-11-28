@@ -14,32 +14,31 @@ function init(userId) {
         port: 9000,
         path: '/videocallapp'
     })
-
     listen()
+    return "true";
+}
+
+function disconnect(){
+    peer.disconnect();
+    return "true"
 }
 
 let localStream
 function listen() {
     peer.on('call', (call) => {
-
         navigator.getUserMedia({
             audio: true, 
             video: true
         }, (stream) => {
             localVideo.srcObject = stream
             localStream = stream
-
             call.answer(stream)
             call.on('stream', (remoteStream) => {
                 remoteVideo.srcObject = remoteStream
-
                 remoteVideo.className = "primary-video"
                 localVideo.className = "secondary-video"
-
             })
-
         })
-        
     })
 }
 
@@ -48,35 +47,33 @@ function startCall(otherUserId) {
         audio: true,
         video: true
     }, (stream) => {
-
         localVideo.srcObject = stream
         localStream = stream
-
         const call = peer.call(otherUserId, stream)
         call.on('stream', (remoteStream) => {
             remoteVideo.srcObject = remoteStream
-
             remoteVideo.className = "primary-video"
             localVideo.className = "secondary-video"
         })
-
     })
 }
 
 function toggleVideo(b) {
     if (b == "true") {
         localStream.getVideoTracks()[0].enabled = true
-        alert("Video ativo")
+        return "true"
     } else {
         localStream.getVideoTracks()[0].enabled = false
+        return "false"
     }
 } 
 
 function toggleAudio(b) {
     if (b == "true") {
         localStream.getAudioTracks()[0].enabled = true
-        alert("Audio ativo")
+        return "true"
     } else {
         localStream.getAudioTracks()[0].enabled = false
+        return "false"
     }
 } 

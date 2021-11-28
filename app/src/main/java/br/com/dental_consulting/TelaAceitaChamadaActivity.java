@@ -9,6 +9,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
@@ -56,6 +57,12 @@ public class TelaAceitaChamadaActivity extends AppCompatActivity {
 
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        webView.clearCache(true);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tela_aceita_chamada);
@@ -67,6 +74,7 @@ public class TelaAceitaChamadaActivity extends AppCompatActivity {
         botaoHabilitarAudio = findViewById(R.id.activity_tela_aceita_chamada_botao_ligarAudio);
 
         webSettings = webView.getSettings();
+        webView.clearCache(true);
 
         botaoHabilitarVideo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,18 +82,22 @@ public class TelaAceitaChamadaActivity extends AppCompatActivity {
                 videoEstaAtivo = !videoEstaAtivo;
                 if (videoEstaAtivo) {
                     botaoHabilitarVideo.setImageResource(R.drawable.ic_baseline_videocam_24);
-                    inicializaVideoTrue(new ValueCallback<String>() {
+                    String evS = "javascript:toggleVideo('true')";
+                    webView.evaluateJavascript(evS, new ValueCallback<String>() {
                         @Override
                         public void onReceiveValue(String value) {
+                            System.out.println("Video: "+value);
                         }
                     });
                 } else {
-                    inicializaVideoFalse(new ValueCallback<String>() {
+                    botaoHabilitarVideo.setImageResource(R.drawable.ic_baseline_videocam_off_24);
+                    String evS = "javascript:toggleVideo('true')";
+                    webView.evaluateJavascript(evS, new ValueCallback<String>() {
                         @Override
                         public void onReceiveValue(String value) {
+                            System.out.println("Video: "+value);
                         }
                     });
-                    botaoHabilitarVideo.setImageResource(R.drawable.ic_baseline_videocam_off_24);
                 }
             }
         });
@@ -96,18 +108,23 @@ public class TelaAceitaChamadaActivity extends AppCompatActivity {
                 audioEstaAtivo = !audioEstaAtivo;
                 if (audioEstaAtivo) {
                     botaoHabilitarAudio.setImageResource(R.drawable.ic_baseline_mic_24);
-                    inicializaAudioTrue(new ValueCallback<String>() {
+                    String evS = "javascript:toggleAudio('true')";
+                    webView.evaluateJavascript(evS, new ValueCallback<String>() {
                         @Override
                         public void onReceiveValue(String value) {
+                            System.out.println("Audio: "+value);
                         }
                     });
+
                 } else {
-                    inicializaAudioFalse(new ValueCallback<String>() {
+                    botaoHabilitarAudio.setImageResource(R.drawable.ic_baseline_mic_off_24);
+                    String evS = "javascript:toggleAudio('false')";
+                    webView.evaluateJavascript(evS, new ValueCallback<String>() {
                         @Override
                         public void onReceiveValue(String value) {
+                            System.out.println("Audio: "+value);
                         }
                     });
-                    botaoHabilitarAudio.setImageResource(R.drawable.ic_baseline_mic_off_24);
                 }
             }
         });
@@ -121,47 +138,6 @@ public class TelaAceitaChamadaActivity extends AppCompatActivity {
         setupWebView();
     }
 
-
-    void inicializaAudioTrue(final ValueCallback<String> valueCallback) {
-        String evS = "javascript:toggleAudio('true')";
-        try {
-            webView.evaluateJavascript(evS, valueCallback);
-        } catch (Exception e) {
-            System.out.println("Erro try: " + e);
-            valueCallback.onReceiveValue(null);// You can pass any value instead of null.
-        }
-    }
-
-    void inicializaAudioFalse(final ValueCallback<String> valueCallback) {
-        String evS = "javascript:toggleAudio('false')";
-        try {
-            webView.evaluateJavascript(evS, valueCallback);
-        } catch (Exception e) {
-            System.out.println("Erro try: " + e);
-            valueCallback.onReceiveValue(null);// You can pass any value instead of null.
-        }
-    }
-
-    void inicializaVideoTrue(final ValueCallback<String> valueCallback) {
-        String evS = "javascript:toggleVideo('true')";
-        try {
-            webView.evaluateJavascript(evS, valueCallback);
-        } catch (Exception e) {
-            System.out.println("Erro try: " + e);
-            valueCallback.onReceiveValue(null);// You can pass any value instead of null.
-        }
-    }
-
-    void inicializaVideoFalse(final ValueCallback<String> valueCallback) {
-        String evS = "javascript:toggleVideo('false')";
-        try {
-            webView.evaluateJavascript(evS, valueCallback);
-        } catch (Exception e) {
-            System.out.println("Erro try: " + e);
-            valueCallback.onReceiveValue(null);// You can pass any value instead of null.
-        }
-    }
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -173,6 +149,8 @@ public class TelaAceitaChamadaActivity extends AppCompatActivity {
     }
 
     private void voltarTela() {
+        String evS = "javascript:disconnect()";
+        webView.evaluateJavascript(evS, null);
         finish();
         startActivity(new Intent(this, DashboardActivity.class));
     }
@@ -198,56 +176,57 @@ public class TelaAceitaChamadaActivity extends AppCompatActivity {
         webView.loadUrl("file:android_asset/call.html");
         webView.setWebViewClient((new WebViewClient() {
             public void onPageFinished(@Nullable WebView view, @Nullable String url) {
-                initializePeer();
+                inicializarJavaScriptInit();
             }
         }));
     }
 
-    private void initializePeer() {
-        inicializarJavaScriptInit(new ValueCallback<String>() {
-            @Override
-            public void onReceiveValue(String value) {
-            }
-        });
-    }
-
-    private void inicializarJavaScriptInit(final ValueCallback<String> valueCallback) {
+    private void inicializarJavaScriptInit() {
         idUnico = gerarUmIdUnico();
         String evS = "javascript:init('" + idUnico + "')";
-        try {
-            webView.evaluateJavascript(evS, valueCallback);
+        webView.evaluateJavascript(evS, new ValueCallback<String>() {
+            @Override
+            public void onReceiveValue(String value) {
+                mensagemRecebida(value);
+            }
+        });
+        System.out.println("##########################################Sistema inicializando +++ inicializarJavaScriptInit");
 
+    }
 
-
-            mDatabase = FirebaseDatabase.getInstance().getReference("usuarios");
-            mDatabase.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    String mUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                    Usuario usuario = snapshot.child(mUid).child("dados").getValue(Usuario.class);
-
-                    String evS = "javascript:startCall('" + usuario.getIdConexao() + "')";
-
-                    try {
-                        webView.evaluateJavascript(evS, valueCallback);
-
-                    } catch (Exception e) {
-                        System.out.println("Erro try: " + e);
-                        valueCallback.onReceiveValue(null);// You can pass any value instead of null.
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
-
-        } catch (Exception e) {
-            System.out.println("Erro try: " + e);
-            valueCallback.onReceiveValue(null);// You can pass any value instead of null.
+    private void mensagemRecebida(String value) {
+        System.out.println("##########################################Sistema CONECTADO!!: " + value);
+        boolean esperaDeConexao = false;
+        int i = 0;
+        System.out.println("##########################################Sistema CONECTADO!!: WHILE");
+        while (!esperaDeConexao){
+            if( !value.isEmpty() ){
+                System.out.println("##########################################Sistema inicializando: "+i );
+                i++;
+                esperaDeConexao = true;
+                inciarChamada();
+            }
         }
+
+    }
+
+    private void inciarChamada() {
+        mDatabase = FirebaseDatabase.getInstance().getReference("usuarios");
+        mDatabase.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String mUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                Usuario usuario = snapshot.child(mUid).child("dados").getValue(Usuario.class);
+                System.out.println("Inicio Start Call");
+                SystemClock.sleep(10000);
+                String evS = "javascript:startCall('" + usuario.getIdConexao() + "')";
+                webView.evaluateJavascript(evS, null);
+                System.out.println("##########################################Sistema inicializando: INCIALIZADA CONEXÃO START CALL");
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
 
     private String gerarUmIdUnico() {
