@@ -4,8 +4,11 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.PermissionRequest;
 import android.webkit.ValueCallback;
@@ -14,6 +17,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -34,7 +38,11 @@ public class TelaDeChamadaActivity extends AppCompatActivity {
     WebView webView;
     WebSettings webSettings;
     String uniqueId;
+    boolean audioAtivo = true;
+    boolean videoAtivo = true;
 
+    ImageView videoImage;
+    ImageView audioImage;
 
     LinearLayout linearLayout;
     private Object String;
@@ -55,8 +63,35 @@ public class TelaDeChamadaActivity extends AppCompatActivity {
         webView = findViewById(R.id.activity_tela_de_chamada_webView);
         webSettings = webView.getSettings();
         encerrar_chamada = findViewById(R.id.activity_tela_de_chamada_botao_encerrar);
-
         linearLayout = findViewById(R.id.activity_tela_de_chamada_linear_layout);
+        videoImage = findViewById(R.id.activity_tela_de_chamada_botao_ligarVideo);
+        audioImage = findViewById(R.id.activity_tela_de_chamada_botao_ligarAudio);
+
+        videoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                videoAtivo = !videoAtivo;
+                if (videoAtivo) {
+                    videoImage.setImageResource(R.drawable.ic_baseline_videocam_24);
+                    inicializaVideo(new ValueCallback<String>() { @Override public void onReceiveValue(String value) {}});
+                } else {
+                    videoImage.setImageResource(R.drawable.ic_baseline_videocam_off_24);
+                }
+            }
+        });
+
+        audioImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                audioAtivo = !audioAtivo;
+                if (audioAtivo) {
+                    audioImage.setImageResource(R.drawable.ic_baseline_mic_24);
+                    inicializaAudio(new ValueCallback<String>() { @Override public void onReceiveValue(String value) {}});
+                } else {
+                    audioImage.setImageResource(R.drawable.ic_baseline_mic_off_24);
+                }
+            }
+        });
 
         encerrar_chamada.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +101,28 @@ public class TelaDeChamadaActivity extends AppCompatActivity {
         });
         setupWebView();
     }
-
+    void inicializaAudio(final ValueCallback<String> valueCallback) {
+        String evS = "javascript:toggleAudio('" + audioAtivo + "')";
+        System.out.println("############################################### VIDEO: " +audioAtivo);
+        try {
+            webView.evaluateJavascript(evS, valueCallback);
+            conectaOsUsuarios(parceiroDeChamada, uniqueId);
+        } catch (Exception e) {
+            System.out.println("Erro try: " + e);
+            valueCallback.onReceiveValue(null);// You can pass any value instead of null.
+        }
+    }
+    void inicializaVideo(final ValueCallback<String> valueCallback) {
+        String evS = "javascript:toggleVideo('" + videoAtivo + "')";
+        System.out.println("############################################### VIDEO: " +videoAtivo);
+        try {
+            webView.evaluateJavascript(evS, valueCallback);
+            conectaOsUsuarios(parceiroDeChamada, uniqueId);
+        } catch (Exception e) {
+            System.out.println("Erro try: " + e);
+            valueCallback.onReceiveValue(null);// You can pass any value instead of null.
+        }
+    }
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -95,25 +151,32 @@ public class TelaDeChamadaActivity extends AppCompatActivity {
 
     private void setupWebView() {
         webSettings.setJavaScriptEnabled(true);
-        webSettings.setAllowUniversalAccessFromFileURLs(true);
+//        webSettings.setAllowUniversalAccessFromFileURLs(true);
         webSettings.setMediaPlaybackRequiresUserGesture(false);
-        webSettings.setAllowFileAccess(true);
-        webSettings.setAllowFileAccess(true);
+//        webSettings.setAllowFileAccess(true);
 
-        webView.setWebViewClient(new WebViewClient(){
+        webView.setWebViewClient(new WebViewClient() {
         });
 
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onPermissionRequest(PermissionRequest request) {
-                super.onPermissionRequest(request);
-                if (request != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     request.grant(request.getResources());
-                    Toast.makeText(TelaDeChamadaActivity.this, "Precisa aceitar permissões", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(TelaDeChamadaActivity.this, "permissões OK", Toast.LENGTH_SHORT).show();
                 }
             }
+//            @Override
+//            public void onPermissionRequest(PermissionRequest request) {
+////                super.onPermissionRequest(request);
+//
+//                if (request != null) {
+//                    request.grant(request.getResources());
+//                    Toast.makeText(TelaDeChamadaActivity.this, "Precisa aceitar permissões", Toast.LENGTH_SHORT).show();
+//
+//                } else {
+//                    Toast.makeText(TelaDeChamadaActivity.this, "permissões OK", Toast.LENGTH_SHORT).show();
+//                }
+//            }
         });
         loadVideoCall();
 //        Toast.makeText(TelaDeChamadaActivity.this, "Inicalizado", Toast.LENGTH_SHORT).show();
@@ -149,19 +212,19 @@ public class TelaDeChamadaActivity extends AppCompatActivity {
 
     private void getFirstUser(final ValueCallback<String> valueCallback) {
         uniqueId = getUniqueID();
-        String evS = "javascript:init('"+uniqueId+ "')";
+        String evS = "javascript:init('" + uniqueId + "')";
         System.out.println("UNICO ID CONETANDO 1: " + uniqueId);
 
         try {
             webView.evaluateJavascript(evS, valueCallback);
-            conectaOsUsuarios(parceiroDeChamada,uniqueId);
+            conectaOsUsuarios(parceiroDeChamada, uniqueId);
         } catch (Exception e) {
             System.out.println("Erro try: " + e);
             valueCallback.onReceiveValue(null);// You can pass any value instead of null.
         }
     }
 
-    private void conectaOsUsuarios(Usuario parceiroDeChamada,  String evS) {
+    private void conectaOsUsuarios(Usuario parceiroDeChamada, String evS) {
         mDatabase = FirebaseDatabase.getInstance().getReference("usuarios");
         // altera estaDisponivel
         mDatabase.child(parceiroDeChamada.getChaveUsuario()).child("dados").child("idConexao").setValue(evS);

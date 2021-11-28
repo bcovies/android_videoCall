@@ -4,7 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.PermissionRequest;
@@ -78,16 +80,6 @@ public class TelaAceitaChamadaActivity extends AppCompatActivity {
     }
 
     private void encerrarChamada(Usuario parceiroDeChamada) {
-//        mDatabase = FirebaseDatabase.getInstance().getReference("usuarios");
-//
-//        mDatabase.child(parceiroDeChamada.getChaveUsuario()).child("dados").child("estaDisponivel").setValue(true);
-//        mDatabase.child(parceiroDeChamada.getChaveUsuario()).child("dados").child("idConexao").setValue("null");
-//        mDatabase.child(parceiroDeChamada.getChaveUsuario()).child("dados").child("emChamadaCom").setValue("null");
-//
-//        mDatabase.child(mAuth.getUid()).child("dados").child("estaDisponivel").setValue(true);
-//        mDatabase.child(mAuth.getUid()).child("dados").child("emChamadaCom").setValue("null");
-//        mDatabase.child(mAuth.getUid()).child("dados").child("idConexao").setValue("null");
-
         voltarTela();
     }
 
@@ -98,10 +90,10 @@ public class TelaAceitaChamadaActivity extends AppCompatActivity {
 
     private void setupWebView() {
         webSettings.setJavaScriptEnabled(true);
-        webSettings.setAllowUniversalAccessFromFileURLs(true);
+//        webSettings.setAllowUniversalAccessFromFileURLs(true);
         webSettings.setMediaPlaybackRequiresUserGesture(false);
-        webSettings.setAllowFileAccess(true);
-        webSettings.setAllowFileAccess(true);
+//        webSettings.setAllowFileAccess(true);
+
 
         webView.setWebViewClient(new WebViewClient(){
         });
@@ -109,14 +101,25 @@ public class TelaAceitaChamadaActivity extends AppCompatActivity {
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onPermissionRequest(PermissionRequest request) {
-                super.onPermissionRequest(request);
-                if (request != null) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     request.grant(request.getResources());
-                    Toast.makeText(TelaAceitaChamadaActivity.this, "Precisa aceitar permissões", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(TelaAceitaChamadaActivity.this, "permissões OK", Toast.LENGTH_SHORT).show();
                 }
             }
+//            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+//            @Override
+//            public void onPermissionRequest(final PermissionRequest request) {
+//                request.grant(request.getResources());
+//            }
+//            @Override
+//            public void onPermissionRequest(PermissionRequest request) {
+////                super.onPermissionRequest(request);
+//                if (request != null) {
+//                    request.grant(request.getResources());
+//                    Toast.makeText(TelaAceitaChamadaActivity.this, "Precisa aceitar permissões", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(TelaAceitaChamadaActivity.this, "permissões OK", Toast.LENGTH_SHORT).show();
+//                }
+//            }
         });
         loadVideoCall();
 //        Toast.makeText(TelaDeChamadaActivity.this, "Inicalizado", Toast.LENGTH_SHORT).show();

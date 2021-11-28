@@ -5,7 +5,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -28,6 +30,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+
 import br.com.dental_consulting.models.Usuario;
 
 public class DashboardActivity extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
@@ -43,13 +50,9 @@ public class DashboardActivity extends AppCompatActivity implements ActivityComp
     TextView textView;
     DatabaseReference mDatabase;
     String mUid;
-
-    private static final int PERMISSION_REQUEST_CAMERA = 0;
-    private static final int PERMISSION_REQUEST_RECORD_AUDIO = 0;
-    String permissaoCamera = "android.permission.CAMERA";
-    String permissaoAudio = "android.permission.RECORD_AUDIO";
-
-
+    int requestcode = 1;
+    ArrayList<String> permissions = new ArrayList<>();
+     String  [] permissao11 = new String[]{Manifest.permission.CAMERA , Manifest.permission.MODIFY_AUDIO_SETTINGS, Manifest.permission.RECORD_AUDIO, Manifest.permission.INTERNET};
     private void aceitarChamadaActivity() {
         finish();
         startActivity(new Intent(this, TelaAceitaChamadaActivity.class));
@@ -82,8 +85,6 @@ public class DashboardActivity extends AppCompatActivity implements ActivityComp
     protected void onStart() {
         super.onStart();
 
-        ActivityCompat.requestPermissions(DashboardActivity.this, new String[]{permissaoCamera}, PERMISSION_REQUEST_CAMERA);
-//        ActivityCompat.requestPermissions(DashboardActivity.this,new String[]{permissaoAudio},PERMISSION_REQUEST_RECORD_AUDIO);
         dashboard_idUsuario = findViewById(R.id.dashboard_textView_idUsuario);
         dashboard_emailUsuario = findViewById(R.id.dashboard_textView_emailUsuario);
 
@@ -105,11 +106,21 @@ public class DashboardActivity extends AppCompatActivity implements ActivityComp
         mDatabase = FirebaseDatabase.getInstance().getReference("usuarios");
         mUid = mAuth.getCurrentUser().getUid().toString();
 
+
+        permissions.add("Manifest.permission.CAMERA");
+        permissions.add("Manifest.permission.RECORD_AUDIO");
+        permissions.add("Manifest.permission.MODIFY_AUDIO_SETTINGS");
+        permissions.add("Manifest.permission.INTERNET");
+
+        if(!ifPermissionGranted(permissions)){
+            askPermissions(permissao11, requestcode);
+        }
+
+
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Usuario usuario = snapshot.child(mUid).child("dados").getValue(Usuario.class);
-
                 System.out.println(usuario.isEstaDisponivel());
                 if (!usuario.isEstaDisponivel()) {
                     onCallRequest();
@@ -121,8 +132,6 @@ public class DashboardActivity extends AppCompatActivity implements ActivityComp
 
             }
         });
-//                .child(mUid).child("dados").child("estaDisponivel").getKey();
-//        System.out.println(teste);
 
         botaoSair = findViewById(R.id.dashboard_botao_sair);
         botaoSair.setOnClickListener(new View.OnClickListener() {
@@ -141,23 +150,26 @@ public class DashboardActivity extends AppCompatActivity implements ActivityComp
         });
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        // BEGIN_INCLUDE(onRequestPermissionsResult)
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_CAMERA) {
-            // Request for camera permission.
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission has been granted. Start camera preview Activity.
-//                Toast.makeText(DashboardActivity.this, "Permissão de câmera adquirida com sucesso!", Toast.LENGTH_SHORT).show();
-            } else {
-                // Permission request was denied.
-                Toast.makeText(DashboardActivity.this, "Permissão de câmera falhou!", Toast.LENGTH_SHORT).show();
+    private void askPermissions(String [] permission11,int requestcode) {
+        ActivityCompat.requestPermissions(this, permission11, requestcode);
+    }
+
+    private boolean ifPermissionGranted(ArrayList<String> permissions) {
+        for (String permission : permissions) {
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            System.out.println("PERMISSÃO: " + permission.toString());
+            System.out.println(ActivityCompat.checkSelfPermission(this,permission));
+            System.out.println( PackageManager.PERMISSION_GRANTED);
+            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            if(ActivityCompat.checkSelfPermission(this,permission) != PackageManager.PERMISSION_GRANTED){
+
+                return false;
             }
         }
-        // END_INCLUDE(onRequestPermissionsResult)
+        return true;
     }
+
 
     private void acessarChamada() {
         startActivity(new Intent(this, ChamadaActivity.class));
