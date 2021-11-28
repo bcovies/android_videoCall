@@ -66,6 +66,7 @@ function startCall(otherUserId) {
 function toggleVideo(b) {
     if (b == "true") {
         localStream.getVideoTracks()[0].enabled = true
+        alert("Video ativo")
     } else {
         localStream.getVideoTracks()[0].enabled = false
     }
@@ -74,6 +75,7 @@ function toggleVideo(b) {
 function toggleAudio(b) {
     if (b == "true") {
         localStream.getAudioTracks()[0].enabled = true
+        alert("Audio ativo")
     } else {
         localStream.getAudioTracks()[0].enabled = false
     }
